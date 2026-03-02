@@ -49,7 +49,6 @@ def driver(request):
         "profile.default_content_setting_values.automatic_downloads": 1,
     }
     options.add_experimental_option("prefs", prefs)
-    
     options.add_argument("--disable-save-password-bubble")
     options.add_argument("--disable-features=PasswordLeakDetection,PasswordCheck,PasswordProtection,PasswordManager,SafeBrowsingEnhancedProtection,ImprovedSecurityWarningsPhishing")
     options.add_argument("--safebrowsing-disable-auto-update")
@@ -63,7 +62,6 @@ def driver(request):
     options.add_argument("--disable-hang-monitor")
     options.add_argument("--disable-prompt-on-repost")
     options.add_argument("--disable-domain-reliability")
-    
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")

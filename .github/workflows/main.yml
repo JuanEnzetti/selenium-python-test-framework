@@ -19,6 +19,12 @@ jobs:
         with:
           python-version: '3.9'
 
+      # Chrome ya viene preinstalado en ubuntu-latest
+      - name: Check Chrome
+        run: |
+          google-chrome --version
+          chromedriver --version
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -26,7 +32,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          python -m pytest tests/ -v --html=reports/report.html
+          python -m pytest tests/ -v --html=reports/report.html --timeout=300
         env:
           BASE_URL: https://www.saucedemo.com
           SAUCE_USERNAME: standard_user
@@ -40,3 +46,10 @@ jobs:
         with:
           name: test-report
           path: reports/report.html
+
+      - name: Upload Screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: reports/screenshots/
