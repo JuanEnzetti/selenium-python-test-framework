@@ -9,7 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -19,7 +19,13 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Check Chrome
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Setup ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+
+      - name: Verify Versions
         run: |
           google-chrome --version
           chromedriver --version
