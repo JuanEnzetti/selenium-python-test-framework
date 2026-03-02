@@ -19,10 +19,15 @@ jobs:
         with:
           python-version: '3.9'
 
-      # Chrome ya viene preinstalado en ubuntu-latest
-      - name: Check Chrome
+      - name: Install ChromeDriver
         run: |
-          google-chrome --version
+          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
+          CHROMEDRIVER_DIR="/home/runner/chromedriver"
+          mkdir -p $CHROMEDRIVER_DIR
+          wget -O $CHROMEDRIVER_DIR/chromedriver.zip "https://storage.googleapis.com/chrome-for-testing-public/$CHROME_VERSION/linux64/chromedriver-linux64.zip"
+          unzip $CHROMEDRIVER_DIR/chromedriver.zip -d $CHROMEDRIVER_DIR
+          export PATH=$PATH:$CHROMEDRIVER_DIR/chromedriver-linux64
+          echo "$CHROMEDRIVER_DIR/chromedriver-linux64" >> $GITHUB_PATH
           chromedriver --version
 
       - name: Install dependencies
@@ -34,7 +39,7 @@ jobs:
         run: |
           python -m pytest tests/ -v --html=reports/report.html --timeout=300
         env:
-          BASE_URL: https://www.saucedemo.com
+          BASE_URL: https://www.saucedemo.com 
           SAUCE_USERNAME: standard_user
           SAUCE_PASSWORD: secret_sauce
           BROWSER: chrome
