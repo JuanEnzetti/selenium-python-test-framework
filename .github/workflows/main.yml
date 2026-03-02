@@ -1,0 +1,42 @@
+name: 🚀 Automation Tests CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Tests
+        run: |
+          python -m pytest tests/ -v --html=reports/report.html
+        env:
+          BASE_URL: https://www.saucedemo.com
+          SAUCE_USERNAME: standard_user
+          SAUCE_PASSWORD: secret_sauce
+          BROWSER: chrome
+          HEADLESS: true
+
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-report
+          path: reports/report.html
